@@ -1,13 +1,18 @@
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
 
 const app = new Hono()
 
-app.get('/', (c) => {
-  return c.json({ message: 'Backend working 🚀' })
-})
+// Enable CORS so your Astro app can talk to this Worker
+app.use('/api/*', cors())
 
-app.get('/api/hello', (c) => {
-  return c.json({ reply: 'Hello from backend 👋' })
+app.post('/api/chat', async (c) => {
+  const body = await c.req.json()
+  const message = body.message
+
+  return c.json({
+    reply: `You said: ${message}`
+  })
 })
 
 export default app

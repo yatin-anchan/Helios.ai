@@ -1,11 +1,40 @@
----
-const res = await fetch(' https://helios-worker.yatin-a-anchan.workers.dev/api/hello')
-const data = await res.json()
----
-
 <html>
   <body>
     <h1>Helios AI 🚀</h1>
-    <p>{data.reply}</p>
+
+    <input id="messageInput" placeholder="Type something..." />
+    <button id="sendBtn">Send</button>
+
+    <p id="response"></p>
+
+    <script>
+  const btn = document.getElementById("sendBtn");
+
+  async function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const responseEl = document.getElementById('response');
+
+    try {
+      const res = await fetch("https://helios-worker.yatin-a-anchan.workers.dev/api/chat", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: input.value
+        })
+      });
+
+      const data = await res.json();
+      responseEl.innerText = data.reply;
+
+    } catch (err) {
+      console.error("Fetch error:", err);
+      responseEl.innerText = "Error connecting to server.";
+    }
+  }
+
+  btn.addEventListener('click', sendMessage);
+</script>
   </body>
 </html>
