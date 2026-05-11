@@ -1,18 +1,8 @@
 import { Hono } from 'hono'
-import { cors } from 'hono/cors'
+import auth from './routes/auth'
 
 const app = new Hono()
 
-// Enable CORS so your Astro app can talk to this Worker
-app.use('/api/*', cors())
-
-app.post('/api/chat', async (c) => {
-  const body = await c.req.json()
-  const message = body.message
-
-  return c.json({
-    reply: `You said: ${message}`
-  })
-})
+app.route('/api/auth', auth)
 
 export default app
